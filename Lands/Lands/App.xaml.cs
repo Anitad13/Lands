@@ -8,8 +8,8 @@ namespace Lands
         public App()
         {
             InitializeComponent();
-
-            MainPage = new NavigationPage(new LoginPage());
+            MainPage = new NavigationPage(new LoginPage()); 
+            //MainPage = new NavigationPage(new LandsPage());
         }
         #endregion
 

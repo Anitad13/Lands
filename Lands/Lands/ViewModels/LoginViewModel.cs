@@ -1,23 +1,22 @@
 ﻿namespace Lands.ViewModels
 {
     using GalaSoft.MvvmLight.Command;
-    using System;
-    using System.ComponentModel;
     using System.Windows.Input;
+    using Views;
     using Xamarin.Forms;
+    
 
-    class LoginViewModel : INotifyPropertyChanged
+    class LoginViewModel : BaseViewModel
      {
-        #region Events
-        //https://www.youtube.com/watch?v=SGx8dAdiua4&t=367s 15:45
-        // a los campos que necesito refrescar como el password debo definirle una propiedad privada region attributes
-        public event PropertyChangedEventHandler PropertyChanged;
-        #endregion
+        
 
         #region Attributes
+        //https://www.youtube.com/watch?v=SGx8dAdiua4&t=367s 15:45
+        // a los campos que necesito refrescar como el password debo definirle una propiedad privada region attributes
         //recomendación llamar elatributo igual que el campo pero en minúscula la primera. campo Email atributo email
         //por defecto los booleanos arrancan en False
 
+        private string email;
         private string password;
         private bool isRunning;
         private bool isEnabled;
@@ -27,25 +26,13 @@
         //pregunta si cambió el valor de la propiedad y si es así llama el evento de refresque
         public string Email
         {
-            get;
-            set;
+            get { return email; }
+            set { SetValue(ref email, value); }
         }
         public string Password
         {
-            get
-            {
-                return password;
-            }
-            set
-            {
-                if (this.password != value)
-                {
-                    this.password = value;
-                    PropertyChanged?.Invoke(
-                        this,
-                        new PropertyChangedEventArgs(nameof(this.Password)));
-                }
-            }
+            get { return password; }
+            set { SetValue(ref password, value); }
         }
         public bool IsRemembered
         {
@@ -54,38 +41,14 @@
 
         public bool IsEnabled
         {
-            get
-            {
-                return isEnabled;
-            }
-            set
-            {
-                if (this.isEnabled != value)
-                {
-                    this.isEnabled = value;
-                    PropertyChanged?.Invoke(
-                        this,
-                        new PropertyChangedEventArgs(nameof(this.IsEnabled)));
-                }
-            }
+            get { return isEnabled; }
+            set { SetValue(ref isEnabled, value); }
         }
 
         public bool IsRunning
         {
-            get
-            {
-                return isRunning;
-            }
-            set
-            {
-                if (this.isRunning != value)
-                {
-                    this.isRunning = value;
-                    PropertyChanged?.Invoke(
-                        this,
-                        new PropertyChangedEventArgs(nameof(this.IsRunning)));
-                }
-            }
+            get { return isRunning; }
+            set { SetValue(ref isRunning, value); }
         }
         #endregion
 
@@ -94,6 +57,9 @@
         {
             this.IsRemembered = true;
             this.isEnabled = true;
+
+            this.Email = "aliscortes@hotmail.com";
+            this.Password = "1234";
         }
         #endregion
 
@@ -150,10 +116,14 @@
             this.IsRunning = false;
             this.IsEnabled = true;
 
-            await Application.Current.MainPage.DisplayAlert(
-                  "Ok",
-                  "The information is correct.",
-                  "Accept");
+            this.Email = string.Empty;
+            this.Password = string.Empty;
+
+           
+
+            MainViewModel.GetInstance().Lands = new LandsViewModel();
+            await Application.Current.MainPage.Navigation.PushAsync(new LandsPage()); 
+
             return;
         }
 
